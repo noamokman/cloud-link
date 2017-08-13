@@ -1,0 +1,11 @@
+{
+  "links": {
+    "lol": {
+      "src": "lol.txt",
+      "dest": {
+        "Laptop": "~/lol2.txt",
+        "PC": "~/lol3.txt"
+      }
+    }
+  }
+}
