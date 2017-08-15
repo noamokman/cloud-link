@@ -1,4 +1,5 @@
 import {hostname} from 'os';
+import {resolve} from 'path';
 import _ from 'lodash';
 import fs from 'fs';
 import pify from 'pify';
@@ -42,11 +43,22 @@ export function list () {
 
 export function status () {
   return list()
-    .then(links => links.map(link => {
-      const linked = fsP.stat(link.path);
+    .then(links => Promise.all(links.map(({dest, src, name}) => {
+      const resolvedSrc = resolve(src);
+      const resolvedDest = resolve(dest[hostname()]);
 
-      return {linked, ...link};
-    }));
+      return fsP.lstat(resolvedDest)
+        .then(stats => {
+          if (!stats.isSymbolicLink()) {
+            return 'not-linked';
+          }
+
+          return fsP.realpath(resolvedDest)
+            .then(res => res !== resolvedSrc ? 'wrong' : 'ok');
+        })
+        .catch(err => err.code === 'ENOENT' ? 'missing' : Promise.resolve(err))
+        .then(status => ({status, src: resolvedSrc, dest: resolvedDest, name}));
+    })));
 }
 
 export function add ({name, src, dest} = {}) {
@@ -85,9 +97,9 @@ export function apply () {
   return get()
     .then(({links}) => Promise.all(_.values(links)
       .filter(({dest}) => dest[hostname()])
-      .map(({path, dest}) => fsP.stat(path)
+      .map(({src, dest}) => fsP.stat(src)
         .then(stats => stats.isDirectory() ? 'junction' : 'file')
-        .then(type => lnfs(path, dest, type)))));
+        .then(type => lnfs(src, dest, type)))));
 }
 
 
