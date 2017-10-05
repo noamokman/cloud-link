@@ -1,9 +1,36 @@
-import {clear, init} from '../src';
+import mock from 'mock-fs';
+import init from '../src/actions/init';
+import clear from '../src/actions/clear';
 
-export const shouldThrowIfNotInitilized = fn => {
+export function shouldThrowIfNotInitilized (fn) {
   it('should throw if not initialized', () => {
-    clear();
     expect(fn).toThrow('Cloud link not initialized');
-    init('.');
   });
-};
+}
+
+export function wrapInitialization (uninitilized, initilized) {
+  describe('uninitilized', () => {
+    shouldThrowIfNotInitilized(uninitilized);
+  });
+
+  describe('initilized', () => {
+    beforeAll(() => {
+      init('.');
+    });
+
+    afterAll(() => {
+      clear();
+    });
+
+    initilized();
+  });
+}
+
+export function mockFs (config) {
+  beforeAll(() => {
+    mock(config);
+  });
+  afterAll(() => {
+    mock.restore();
+  });
+}
