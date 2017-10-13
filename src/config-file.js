@@ -5,6 +5,7 @@ import pify from 'pify';
 import store from './store';
 import CloudLinkError from './cloud-link-error';
 import initialized from './actions/initialized';
+import _ from 'lodash';
 
 const jf = pify(jsonfile);
 const fsP = pify(fs);
@@ -21,7 +22,7 @@ export const getPath = () => {
 };
 
 export const get = () => jf.readFile(getPath())
-  .catch(err => err.code !== 'ENOENT' ? Promise.reject(err) : defaultTemplate);
+  .catch(err => err.code !== 'ENOENT' ? Promise.reject(err) : _.cloneDeep(defaultTemplate));
 
 export const set = data => jf.writeFile(getPath(), data);
 
