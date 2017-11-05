@@ -58,7 +58,7 @@ describe('cloud-link', () => {
 
         it('should return the template on missing file', () => configFile.get()
           .then(config => {
-            expect(config).toBe(configFile.defaultTemplate);
+            expect(config).toEqual(configFile.defaultTemplate);
           }));
 
         it('should return the file contents', () => {
@@ -104,7 +104,7 @@ describe('cloud-link', () => {
             .then(() => configFile.clean())
             .then(() => configFile.get())
             .then(config => {
-              expect(config).toBe(configFile.defaultTemplate);
+              expect(config).toEqual(configFile.defaultTemplate);
             });
         });
       });

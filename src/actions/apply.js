@@ -14,10 +14,4 @@ export default () => get()
       .then(stats => stats.isDirectory() ? 'junction' : 'file')
       .then(type => lnfs(src, dest, type))
       .then(() => ({name, src, dest, status: 'linked'}))
-      .catch(error => {
-        if (error.code !== 'ENOENT') {
-          return {name, src, dest, error, status: 'error'};
-        }
-
-        return {name, src, dest, error, status: 'missing'};
-      }))));
+      .catch(error => ({name, src, dest, error, status: error.code !== 'ENOENT' ? 'error' : 'missing'})))));

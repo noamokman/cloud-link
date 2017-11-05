@@ -12,7 +12,7 @@ describe('cloud-link', () => {
       {name: 'dir', src: 'dir', dest: 'dir2'}
     ];
 
-    wrapInitialization(() => apply(links[0]), () => {
+    wrapInitialization(() => apply(), () => {
       mockFs({
         dir: {},
         'error.txt': 'error',
@@ -30,7 +30,7 @@ describe('cloud-link', () => {
         lnfs._clearMocks();
       });
 
-      it('should apply all the links', () => Promise.all(links.map(add))
+      it('should apply all the links', () => add(...links)
         .then(() => apply())
         .then(report => {
           expect(report).toHaveLength(4);
