@@ -18,7 +18,7 @@ describe('cloud-link', () => {
         expect(typeof configFile.getPath).toBe('function');
       });
 
-      it('should expose an get function', () => {
+      it('should expose a get function', () => {
         expect(typeof configFile.get).toBe('function');
       });
 
