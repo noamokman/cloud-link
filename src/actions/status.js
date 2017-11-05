@@ -3,6 +3,7 @@ import {hostname} from 'os';
 import {resolve} from 'path';
 import fs from 'fs';
 import pify from 'pify';
+import pCatchIf from 'p-catch-if';
 
 const {lstat, realpath} = pify(fs);
 
@@ -20,6 +21,6 @@ export default () => list()
         return realpath(resolvedDest)
           .then(res => res !== resolvedSrc ? 'wrong' : 'linked');
       })
-      .catch(err => err.code === 'ENOENT' ? 'missing' : Promise.reject(err))
+      .catch(pCatchIf(err => err.code === 'ENOENT', () => 'missing'))
       .then(status => ({status, src: resolvedSrc, dest: resolvedDest, name}));
   })));
