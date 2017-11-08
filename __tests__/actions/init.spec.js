@@ -1,7 +1,7 @@
+import {resolve} from 'path';
 import init from '../../src/actions/init';
 import clear from '../../src/actions/clear';
 import store from '../../src/store';
-import {resolve} from 'path';
 
 describe('cloud-link', () => {
   describe('init', () => {

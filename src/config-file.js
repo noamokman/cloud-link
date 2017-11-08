@@ -2,11 +2,11 @@ import {join} from 'path';
 import fs from 'fs';
 import jsonfile from 'jsonfile';
 import pify from 'pify';
+import _ from 'lodash';
+import pCatchIf from 'p-catch-if';
 import store from './store';
 import CloudLinkError from './cloud-link-error';
 import initialized from './actions/initialized';
-import _ from 'lodash';
-import pCatchIf from 'p-catch-if';
 
 const jf = pify(jsonfile);
 const fsP = pify(fs);

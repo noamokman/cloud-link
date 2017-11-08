@@ -1,9 +1,9 @@
-import {wrapInitialization, mockFs} from '../util';
-import status from '../../src/actions/status';
-import add from '../../src/actions/add';
 import {resolve} from 'path';
 import {symlink} from 'fs';
 import pify from 'pify';
+import {wrapInitialization, mockFs} from '../util';
+import status from '../../src/actions/status';
+import add from '../../src/actions/add';
 
 const symlinkP = pify(symlink);
 

@@ -1,6 +1,6 @@
+import {stat} from 'fs';
 import {hostname} from 'os';
 import lnfs from 'lnfs';
-import {stat} from 'fs';
 import pify from 'pify';
 import {get} from '../config-file';
 
@@ -14,4 +14,4 @@ export default () => get()
       .then(stats => stats.isDirectory() ? 'junction' : 'file')
       .then(type => lnfs(src, dest, type))
       .then(() => ({name, src, dest, status: 'linked'}))
-      .catch(error => ({name, src, dest, error, status: error.code !== 'ENOENT' ? 'error' : 'missing'})))));
+      .catch(err => ({name, src, dest, error: err, status: err.code !== 'ENOENT' ? 'error' : 'missing'})))));

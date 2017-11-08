@@ -1,6 +1,6 @@
-import * as configFile from '../src/config-file';
-import mock from 'mock-fs';
 import {resolve} from 'path';
+import mock from 'mock-fs';
+import * as configFile from '../src/config-file';
 import {mockFs, wrapInitialization} from './util';
 
 describe('cloud-link', () => {

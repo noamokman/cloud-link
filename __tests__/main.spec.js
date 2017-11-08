@@ -33,9 +33,5 @@ describe('cloud-link', () => {
     it('should expose an apply function', () => {
       expect(typeof cloudLink.apply).toBe('function');
     });
-
-    it('should expose an link function', () => {
-      expect(typeof cloudLink.link).toBe('function');
-    });
   });
 });
