@@ -1,10 +1,10 @@
-import program from 'caporal';
-import {notify} from '../util';
+import {registerCommand} from '../util';
 import {clear} from '../..';
 
-program.command('clear', 'Clear initialization')
-  .action((args, options, logger) => {
+registerCommand({
+  name: 'clear',
+  description: 'Clear path to cloud folder',
+  action ({logger}) {
     logger.info(clear());
-
-    notify();
-  });
+  }
+});

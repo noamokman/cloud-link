@@ -1,10 +1,11 @@
-import program from 'caporal';
-import {notify} from '../util';
+import {registerCommand} from '../util';
 import {clean} from '../..';
 
-program.command('clean', 'Delete all configured links')
-  .action((args, options, logger) => {
+registerCommand({
+  initialization: true,
+  name: 'clean',
+  description: 'Delete all configured links',
+  action ({logger}) {
     logger.info(clean());
-
-    notify();
-  });
+  }
+});

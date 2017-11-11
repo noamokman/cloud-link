@@ -1,11 +1,11 @@
-import program from 'caporal';
-import {notify} from '../util';
+import {registerCommand} from '../util';
 import {init} from '../..';
 
-program.command('init', 'Initialize a new computer')
-  .argument('<path>', 'Cloud folder path')
-  .action(({path}, options, logger) => {
+registerCommand({
+  name: 'init',
+  description: 'Set the path to the cloud folder',
+  args: [['<path>', 'Cloud folder path']],
+  action ({args: {path}, logger}) {
     logger.info(init(path));
-
-    notify();
-  });
+  }
+});

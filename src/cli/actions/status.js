@@ -1,10 +1,11 @@
-import program from 'caporal';
-import {notify} from '../util';
+import {registerCommand} from '../util';
 import {status} from '../..';
 
-program.command('status', 'Show the link status of configured links')
-  .action((args, options, logger) => {
+registerCommand({
+  initialization: true,
+  name: 'status',
+  description: 'Show the link status of configured links',
+  action ({logger}) {
     logger.info(status());
-
-    notify();
-  });
+  }
+});

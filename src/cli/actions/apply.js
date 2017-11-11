@@ -1,10 +1,11 @@
-import program from 'caporal';
-import {notify} from '../util';
+import {registerCommand} from '../util';
 import {apply} from '../..';
 
-program.command('apply', 'Apply all existing links')
-  .action((args, options, logger) => {
+registerCommand({
+  initialization: true,
+  name: 'apply',
+  description: 'Apply all existing links',
+  action ({logger}) {
     logger.info(apply());
-
-    notify();
-  });
+  }
+});
