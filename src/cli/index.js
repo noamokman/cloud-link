@@ -5,6 +5,7 @@ import './actions/add';
 import './actions/apply';
 import './actions/clean';
 import './actions/clear';
+import './actions/info';
 import './actions/init';
 import './actions/initialized';
 import './actions/list';
