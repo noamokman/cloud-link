@@ -8,11 +8,15 @@ export const notifier = updateNotifier({pkg});
 
 export const notify = () => notifier.notify();
 
-export const registerCommand = ({name, description, initialization, action, args = []}) => {
+export const registerCommand = ({name, description, initialization, action, args = [], opts = []}) => {
   const command = program.command(name, description);
 
   args.forEach(argument => {
     command.argument(...argument);
+  });
+
+  opts.forEach(option => {
+    command.option(...option);
   });
 
   command
