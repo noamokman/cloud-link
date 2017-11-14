@@ -28,12 +28,6 @@ registerCommand({
       message: 'Do you want to overwrite?',
       default: false
     }])
-      .then(({overwrite}) => {
-        if (!overwrite) {
-          return;
-        }
-
-        initialize();
-      });
+      .then(({overwrite}) => overwrite && initialize());
   }
 });
