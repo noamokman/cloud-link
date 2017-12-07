@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/noamokman/cloud-link#readme",
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "lint-staged": {
     "*.js": [
@@ -43,18 +43,18 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^4.3.0",
-    "@commitlint/config-angular": "^4.3.0",
+    "@commitlint/cli": "^5.2.0",
+    "@commitlint/config-angular": "^5.1.1",
     "babel-cli": "^6.26.0",
     "babel-jest": "^21.2.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "coveralls": "^3.0.0",
-    "eslint": "^4.10.0",
+    "eslint": "^4.12.1",
     "eslint-config-noamokman": "^7.1.0",
     "husky": "^0.14.3",
     "jest": "^21.2.1",
-    "lint-staged": "^4.3.0",
+    "lint-staged": "^6.0.0",
     "mock-fs": "^4.4.2",
     "npm-run-all": "^4.1.2",
     "rimraf": "^2.6.2"
@@ -62,7 +62,7 @@
   "dependencies": {
     "caporal": "^0.8.0",
     "configstore": "^3.1.1",
-    "inquirer": "^3.3.0",
+    "inquirer": "^4.0.1",
     "jsonfile": "^4.0.0",
     "lnfs": "^3.0.1",
     "lodash": "^4.17.4",

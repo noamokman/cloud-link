@@ -2,14 +2,10 @@ const lnfs = jest.genMockFromModule('lnfs');
 
 let mocks = [];
 
-const mock = function (...args) {
+const mock = (...args) => {
   const found = mocks.find(({predicate}) => predicate(...args));
 
-  if (found) {
-    return found.value;
-  }
-
-  return lnfs(...args);
+  return found ? found.value() : lnfs(...args);
 };
 
 mock._registerMock = mock => {
