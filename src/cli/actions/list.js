@@ -7,8 +7,14 @@ registerCommand({
   description: 'List configured links',
   action ({logger}) {
     return list()
-      .then(data => {
-        logger.info(data);
+      .then(links => {
+        if (!links.length) {
+          logger.info('No links found, add some links with `cloud-link add`.');
+
+          return;
+        }
+
+        logger.info(links);
       });
   }
 });
