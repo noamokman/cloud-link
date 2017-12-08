@@ -6,7 +6,7 @@ registerCommand({
   name: 'status',
   description: 'Show the link status of configured links',
   args: [['[...names]', 'names of links to show']],
-  action ({args: {names}, logger}) {
+  action ({args: {names = []}, logger}) {
     return status(...names)
       .then(links => {
         if (!links.length) {
