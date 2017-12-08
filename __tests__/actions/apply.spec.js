@@ -21,7 +21,7 @@ describe('cloud-link', () => {
 
       beforeAll(() => {
         lnfs._registerMock({
-          predicate: src => src === 'error.txt',
+          predicate: src => src.includes('error.txt'),
           value: () => Promise.reject(new Error('error'))
         });
       });

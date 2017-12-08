@@ -4,6 +4,7 @@ import fs from 'fs';
 import pify from 'pify';
 import pCatchIf from 'p-catch-if';
 import _ from 'lodash';
+import store from '../store';
 import list from './list';
 
 const {lstat, realpath} = pify(fs);
@@ -13,7 +14,7 @@ export default (...names) => list()
     const statusLinks = names.length ? links.filter(({name}) => names.includes(name)) : links;
 
     return Promise.all(statusLinks.map(({dest, src, name}) => {
-      const resolvedSrc = resolve(src);
+      const resolvedSrc = resolve(store.get('cloudPath'), src);
       const resolvedDest = resolve(dest[hostname()]);
 
       return lstat(resolvedDest)

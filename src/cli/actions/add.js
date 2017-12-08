@@ -11,7 +11,7 @@ registerCommand({
   initialization: true,
   name: 'add',
   description: 'Add a new link',
-  args: [['<name>', 'name of the link'], ['[src]', 'link source'], ['<dest>', 'link destination']],
+  args: [['<name>', 'name of the link'], ['[src]', 'relative path to source inside the cloud folder'], ['<dest>', 'path to the destination']],
   action ({args: {name, src, dest}, logger}) {
     src = src || getSrcByName(name);
 

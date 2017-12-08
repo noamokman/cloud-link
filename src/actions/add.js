@@ -1,4 +1,5 @@
 import {hostname} from 'os';
+import {resolve} from 'path';
 import {get, set} from '../config-file';
 import CloudLinkError from '../cloud-link-error';
 
@@ -18,7 +19,7 @@ export default (...links) => {
           throw new CloudLinkError('Trying to add conflicting links. try to remove the link first.');
         }
 
-        link.dest[hostname()] = dest;
+        link.dest[hostname()] = resolve(dest);
 
         return {...links, [name]: link};
       }, data.links);

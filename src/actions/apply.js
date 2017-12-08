@@ -1,14 +1,16 @@
 import {stat} from 'fs';
 import {hostname} from 'os';
+import {resolve} from 'path';
 import lnfs from 'lnfs';
 import pify from 'pify';
+import store from '../store';
 import list from './list';
 
 const statP = pify(stat);
 
 export default () => list()
   .then(links => Promise.all(links
-    .map(link => ({...link, dest: link.dest[hostname()]}))
+    .map(link => ({...link, src: resolve(store.get('cloudPath'), link.src), dest: link.dest[hostname()]}))
     .filter(({dest}) => dest)
     .map(({src, dest, name}) => statP(src)
       .then(stats => stats.isDirectory() ? 'junction' : 'file')
