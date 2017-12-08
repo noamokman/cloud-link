@@ -8,12 +8,16 @@ import list from './list';
 
 const statP = pify(stat);
 
-export default () => list()
-  .then(links => Promise.all(links
-    .map(link => ({...link, src: resolve(store.get('cloudPath'), link.src), dest: link.dest[hostname()]}))
-    .filter(({dest}) => dest)
-    .map(({src, dest, name}) => statP(src)
-      .then(stats => stats.isDirectory() ? 'junction' : 'file')
-      .then(type => lnfs(src, dest, type))
-      .then(() => ({name, src, dest, status: 'linked'}))
-      .catch(err => ({name, src, dest, error: err, status: err.code !== 'ENOENT' ? 'error' : 'missing'})))));
+export default (...names) => list()
+  .then(links => {
+    const applyLinks = names.length ? links.filter(({name}) => names.includes(name)) : links;
+
+    return Promise.all(applyLinks
+      .map(link => ({...link, src: resolve(store.get('cloudPath'), link.src), dest: link.dest[hostname()]}))
+      .filter(({dest}) => dest)
+      .map(({src, dest, name}) => statP(src)
+        .then(stats => stats.isDirectory() ? 'junction' : 'file')
+        .then(type => lnfs(src, dest, type))
+        .then(() => ({name, src, dest, status: 'linked'}))
+        .catch(err => ({name, src, dest, error: err, status: err.code !== 'ENOENT' ? 'error' : 'missing'}))));
+  });

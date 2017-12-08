@@ -2,6 +2,7 @@ import {hostname} from 'os';
 import {resolve} from 'path';
 import {get, set} from '../config-file';
 import CloudLinkError from '../cloud-link-error';
+import apply from './apply';
 
 export default (...links) => {
   const badLink = links.find(({name, src, dest}) => typeof name !== 'string' || typeof src !== 'string' || typeof dest !== 'string');
@@ -25,5 +26,6 @@ export default (...links) => {
       }, data.links);
 
       return set({...data, links: newLinks});
-    });
+    })
+    .then(() => apply(...links.filter(({apply}) => apply).map(({name}) => name)));
 };
