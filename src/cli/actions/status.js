@@ -5,7 +5,17 @@ registerCommand({
   initialization: true,
   name: 'status',
   description: 'Show the link status of configured links',
-  action ({logger}) {
-    logger.info(status());
+  args: [['[...names]', 'names of links to show']],
+  action ({args: {names}, logger}) {
+    return status(...names)
+      .then(links => {
+        if (!links.length) {
+          logger.info('No links found, add some links with `cloud-link add`.');
+
+          return;
+        }
+
+        logger.info(links);
+      });
   }
 });

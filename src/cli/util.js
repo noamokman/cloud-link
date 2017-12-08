@@ -1,8 +1,17 @@
 import updateNotifier from 'update-notifier';
+import PrettyError from 'pretty-error';
 import program from 'caporal';
 import pTry from 'p-try';
 import pkg from '../../package.json';
 import initialized from '../actions/initialized';
+
+const pe = new PrettyError();
+
+pe.appendStyle({
+  'pretty-error > trace > item': {
+    marginBottom: 0
+  }
+});
 
 export const notifier = updateNotifier({pkg});
 
@@ -31,6 +40,8 @@ export const registerCommand = ({name, description, initialization, action, args
         .then(() => {
           notify();
         })
-        .catch(console.error);
+        .catch(err => {
+          console.error(pe.render(err));
+        });
     });
 };

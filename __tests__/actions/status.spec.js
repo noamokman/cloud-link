@@ -25,7 +25,7 @@ describe('cloud-link', () => {
         };
 
         return add(link)
-          .then(status)
+          .then(() => status())
           .then(links => {
             expect(Array.isArray(links)).toBeTruthy();
             expect(links).toHaveLength(1);
@@ -49,7 +49,7 @@ describe('cloud-link', () => {
         };
 
         return add(link)
-          .then(status)
+          .then(() => status())
           .then(links => {
             expect(Array.isArray(links)).toBeTruthy();
             expect(links).toHaveLength(2);
@@ -74,7 +74,7 @@ describe('cloud-link', () => {
 
         return symlinkP(resolve('wrong3.txt'), resolve('wrong2.txt'))
           .then(() => add(link))
-          .then(status)
+          .then(() => status())
           .then(links => {
             expect(Array.isArray(links)).toBeTruthy();
             expect(links).toHaveLength(3);
@@ -99,7 +99,7 @@ describe('cloud-link', () => {
 
         return symlinkP(resolve(link.src), resolve('linked2.txt'))
           .then(() => add(link))
-          .then(status)
+          .then(() => status())
           .then(links => {
             expect(Array.isArray(links)).toBeTruthy();
             expect(links).toHaveLength(4);
@@ -114,6 +114,12 @@ describe('cloud-link', () => {
             });
           });
       });
+
+      it('should show status by name', () => status('linked')
+        .then(links => {
+          expect(Array.isArray(links)).toBeTruthy();
+          expect(links).toHaveLength(1);
+        }));
     });
   });
 });
