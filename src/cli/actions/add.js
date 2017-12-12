@@ -13,13 +13,7 @@ const resolveSrc = (src, name) => {
   const srcPromise = src ? Promise.resolve(src) : getSrcByName(name);
 
   return srcPromise
-    .then(src => {
-      if (!src) {
-        return Promise.reject(new TypeError('Could not find the source from the given name, that means this is a new link and need to be provided with the source as well.'));
-      }
-
-      return src;
-    });
+    .then(src => src || Promise.reject(new TypeError('Could not find the source from the given name, that means this is a new link and need to be provided with the source as well.')));
 };
 
 registerCommand({

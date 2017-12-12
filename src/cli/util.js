@@ -1,6 +1,7 @@
 import updateNotifier from 'update-notifier';
 import PrettyError from 'pretty-error';
 import program from 'caporal';
+import inquirer from 'inquirer';
 import pTry from 'p-try';
 import pkg from '../../package.json';
 import initialized from '../actions/initialized';
@@ -44,4 +45,18 @@ export const registerCommand = ({name, description, initialization, action, args
           console.error(pe.render(err));
         });
     });
+};
+
+export const askConfirmation = ({shouldAsk = true, message, action}) => {
+  if (!shouldAsk) {
+    return action();
+  }
+
+  return inquirer.prompt([{
+    type: 'confirm',
+    name: 'confirm',
+    message,
+    default: false
+  }])
+    .then(({confirm}) => confirm && action());
 };

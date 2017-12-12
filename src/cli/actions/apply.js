@@ -10,7 +10,7 @@ registerCommand({
     return apply(...names)
       .then(links => {
         if (!links.length) {
-          logger.info('No links applied, add some links with `cloud-link add`.');
+          logger.info('No links to apply, add some links with `cloud-link add`.');
 
           return;
         }
