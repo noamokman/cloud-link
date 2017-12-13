@@ -33,11 +33,20 @@ registerCommand({
       .then(report => {
         logger.info(`Link ${name} added successfully!`);
 
-        if (apply) {
-          const [{src, dest}] = report;
-
-          logger.info(`${src} <- ${dest}`);
+        if (!apply) {
+          return;
         }
+
+        const [{src, dest, error}] = report;
+
+        if (error) {
+          logger.info(`Link failed to apply! Try to apply again with 'cloud-link apply ${name}'`);
+          logger.error(error);
+
+          return;
+        }
+
+        logger.info(`${src} <- ${dest}`);
       });
   }
 });
