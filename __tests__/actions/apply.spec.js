@@ -64,6 +64,19 @@ describe('cloud-link', () => {
           expect(dir).toHaveProperty('status', 'linked');
           expect(dir).not.toHaveProperty('error');
         }));
+
+      it('should apply given links', () => add(...links)
+        .then(() => apply('good'))
+        .then(report => {
+          expect(report).toHaveLength(1);
+
+          const [good] = report;
+
+          expect(good).toHaveProperty('name', good.name);
+          expect(good).toHaveProperty('src', good.src);
+          expect(good).toHaveProperty('status', 'linked');
+          expect(good).not.toHaveProperty('error');
+        }));
     });
   });
 });

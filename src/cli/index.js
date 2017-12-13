@@ -9,6 +9,7 @@ import './actions/info';
 import './actions/init';
 import './actions/initialized';
 import './actions/list';
+import './actions/remove';
 import './actions/status';
 
 program.version(version)

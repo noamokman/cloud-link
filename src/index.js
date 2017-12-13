@@ -6,6 +6,7 @@ import info from './actions/info';
 import init from './actions/init';
 import initialized from './actions/initialized';
 import list from './actions/list';
+import remove from './actions/remove';
 import status from './actions/status';
 
 export {
@@ -17,5 +18,6 @@ export {
   init,
   initialized,
   list,
+  remove,
   status
 };
