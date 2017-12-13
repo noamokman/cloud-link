@@ -4,14 +4,15 @@ import {remove} from '../..';
 
 registerCommand({
   initialization: true,
-  name: 'status',
+  name: 'remove',
+  alias: 'rm',
   description: 'Remove a link',
-  args: [['[...names]', 'names of links to show']],
-  opts: [['-a, --all', 'remove links from all computers', BOOL, false]],
-  action ({args: {names = []}, options: {all}, logger}) {
-    return remove(...names.map(name => ({name, all})))
+  args: [['<name>', 'name of link to remove']],
+  opts: [['-a, --all', 'remove link from all computers', BOOL, false]],
+  action ({args: {name}, options: {all}, logger}) {
+    return remove({name, all})
       .then(() => {
-        logger.info('Links were removed successfully');
+        logger.info('Link was removed successfully!');
       });
   }
 });
