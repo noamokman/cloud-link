@@ -48,11 +48,6 @@ describe('cloud-link', () => {
             expect(list[2]).toHaveProperty('src', links[1].src);
           });
       });
-
-      it('should apply the link if wanted', () => add({...link, apply: true})
-        .then(result => {
-          expect(result).toHaveLength(1);
-        }));
     });
   });
 });

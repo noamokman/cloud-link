@@ -1,6 +1,6 @@
 import {BOOL} from 'caporal';
 import {registerCommand} from '../util';
-import {add, list} from '../..';
+import {add, apply, list} from '../..';
 
 const getSrcByName = name => list()
   .then(links => {
@@ -22,18 +22,19 @@ registerCommand({
   description: 'Add a new link',
   args: [['<name>', 'name of the link'], ['[src]', 'relative path to source inside the cloud folder'], ['<dest>', 'path to the destination']],
   opts: [['-a, --apply', 'apply the link', BOOL, true]],
-  action ({options: {apply}, args: {name, src, dest}, logger}) {
+  action ({options: {apply: shouldApply}, args: {name, src, dest}, logger}) {
     if (!dest) {
       dest = src;
       src = null;
     }
 
     return resolveSrc(src, name)
-      .then(src => add({name, src, dest, apply}))
+      .then(src => add({name, src, dest}))
+      .then(() => shouldApply && apply(name))
       .then(report => {
         logger.info(`Link ${name} added successfully!`);
 
-        if (!apply) {
+        if (!shouldApply) {
           return;
         }
 
