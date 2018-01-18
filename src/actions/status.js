@@ -12,8 +12,9 @@ const {lstat, realpath} = pify(fs);
 export default (...names) => list()
   .then(links => {
     const statusLinks = names.length ? links.filter(({name}) => names.includes(name)) : links;
+    const localLinks = statusLinks.filter(({dest}) => dest[hostname()]);
 
-    return Promise.all(statusLinks.map(({dest, src, name}) => {
+    return Promise.all(localLinks.map(({dest, src, name}) => {
       const resolvedSrc = resolve(store.get('cloudPath'), src);
       const resolvedDest = resolve(dest[hostname()]);
 
