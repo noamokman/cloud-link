@@ -11,10 +11,10 @@ registerCommand({
     return askConfirmation({
       shouldAsk: !force,
       message: 'Are you sure that you want to delete all configured links?',
-      action: () => clean()
-        .then(() => {
-          logger.info('Cloud link cleaned successfully!');
-        })
+      async action () {
+        await clean();
+        logger.info('Cloud link cleaned successfully!');
+      }
     });
   }
 });

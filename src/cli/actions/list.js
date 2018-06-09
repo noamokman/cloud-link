@@ -5,16 +5,15 @@ registerCommand({
   initialization: true,
   name: 'list',
   description: 'List configured links',
-  action ({logger}) {
-    return list()
-      .then(links => {
-        if (!links.length) {
-          logger.info('No links found, add some links with `cloud-link add`.');
+  async action ({logger}) {
+    const links = await list();
 
-          return;
-        }
+    if (!links.length) {
+      logger.info('No links found, add some links with `cloud-link add`.');
 
-        logger.info(links);
-      });
+      return;
+    }
+
+    logger.info(links);
   }
 });

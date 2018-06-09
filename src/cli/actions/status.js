@@ -6,16 +6,15 @@ registerCommand({
   name: 'status',
   description: 'Show the link status of configured links',
   args: [['[names...]', 'names of links to show']],
-  action ({args: {names = []}, logger}) {
-    return status(...names)
-      .then(links => {
-        if (!links.length) {
-          logger.info('No links found, add some links with `cloud-link add`.');
+  async action ({args: {names = []}, logger}) {
+    const links = await status(...names);
 
-          return;
-        }
+    if (!links.length) {
+      logger.info('No links found, add some links with `cloud-link add`.');
 
-        logger.info(links);
-      });
+      return;
+    }
+
+    logger.info(links);
   }
 });

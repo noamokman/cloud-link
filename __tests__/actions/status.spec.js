@@ -115,11 +115,12 @@ describe('cloud-link', () => {
           });
       });
 
-      it('should show status by name', () => status('linked')
-        .then(links => {
-          expect(Array.isArray(links)).toBeTruthy();
-          expect(links).toHaveLength(1);
-        }));
+      it('should show status by name', async () => {
+        const links = await status('linked');
+
+        expect(Array.isArray(links)).toBeTruthy();
+        expect(links).toHaveLength(1);
+      });
     });
   });
 });

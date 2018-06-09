@@ -22,32 +22,30 @@ registerCommand({
   description: 'Add a new link',
   args: [['<name>', 'name of the link'], ['[src]', 'relative path to source inside the cloud folder'], ['<dest>', 'path to the destination']],
   opts: [['-a, --apply', 'apply the link', BOOL, true]],
-  action ({options: {apply: shouldApply}, args: {name, src, dest}, logger}) {
+  async action ({options: {apply: shouldApply}, args: {name, src, dest}, logger}) {
     if (!dest) {
       dest = src;
       src = null;
     }
 
-    return resolveSrc(src, name)
-      .then(src => add({name, src, dest}))
-      .then(() => shouldApply && apply(name))
-      .then(report => {
-        logger.info(`Link ${name} added successfully!`);
+    const resolvedSrc = resolveSrc(src, name);
 
-        if (!shouldApply) {
-          return;
-        }
+    await add({name, src: resolvedSrc, dest});
+    logger.info(`Link ${name} added successfully!`);
 
-        const [{src, dest, error}] = report;
+    if (!shouldApply) {
+      return;
+    }
 
-        if (error) {
-          logger.info(`Link failed to apply! Try to apply again with 'cloud-link apply ${name}'`);
-          logger.error(error);
+    const [{src: applySrc, dest: applyDest, error}] = await apply(name);
 
-          return;
-        }
+    if (error) {
+      logger.info(`Link failed to apply! Try to apply again with 'cloud-link apply ${name}'`);
+      logger.error(error);
 
-        logger.info(`${src} <- ${dest}`);
-      });
+      return;
+    }
+
+    logger.info(`${applySrc} <- ${applyDest}`);
   }
 });

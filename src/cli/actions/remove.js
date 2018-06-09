@@ -9,10 +9,8 @@ registerCommand({
   description: 'Remove a link',
   args: [['<name>', 'name of link to remove']],
   opts: [['-a, --all', 'remove link from all computers', BOOL, false]],
-  action ({args: {name}, options: {all}, logger}) {
-    return remove({name, all})
-      .then(() => {
-        logger.info('Link was removed successfully!');
-      });
+  async action ({args: {name}, options: {all}, logger}) {
+    await remove({name, all});
+    logger.info('Link was removed successfully!');
   }
 });

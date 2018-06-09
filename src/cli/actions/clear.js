@@ -10,7 +10,7 @@ registerCommand({
     return askConfirmation({
       shouldAsk: !force,
       message: 'Are you sure that you want to clear the path to cloud folder?',
-      action: () => {
+      action () {
         clear();
         logger.info('Cleared successfully!');
       }

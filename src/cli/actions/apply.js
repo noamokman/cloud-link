@@ -6,16 +6,15 @@ registerCommand({
   name: 'apply',
   description: 'Apply all existing links',
   args: [['[names...]', 'names of links to apply']],
-  action ({args: {names = []}, logger}) {
-    return apply(...names)
-      .then(links => {
-        if (!links.length) {
-          logger.info('No links to apply, add some links with `cloud-link add`.');
+  async action ({args: {names = []}, logger}) {
+    const links = await apply(...names);
 
-          return;
-        }
+    if (!links.length) {
+      logger.info('No links to apply, add some links with `cloud-link add`.');
 
-        logger.info(links);
-      });
+      return;
+    }
+
+    logger.info(links);
   }
 });

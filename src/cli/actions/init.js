@@ -14,7 +14,7 @@ registerCommand({
       shouldAsk: cloudPath && !force,
       message: `Cloud link already initialized in \`${cloudPath}\`.
 Do you want to overwrite?`,
-      action: () => {
+      action () {
         init(path);
         logger.info('Cloud link initialized.');
       }
