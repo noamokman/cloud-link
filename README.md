@@ -1,4 +1,4 @@
-# cloud-link [![Build Status](https://travis-ci.org/noamokman/cloud-link.svg?branch=master)](https://travis-ci.org/noamokman/cloud-link) [![Coverage Status](https://coveralls.io/repos/github/noamokman/cloud-link/badge.svg?branch=master)](https://coveralls.io/github/noamokman/cloud-link?branch=master)
+# cloud-link [![Build Status](https://travis-ci.org/noamokman/cloud-link.svg?branch=master)](https://travis-ci.org/noamokman/cloud-link) [![Coverage Status](https://coveralls.io/repos/github/noamokman/cloud-link/badge.svg?branch=master)](https://coveralls.io/github/noamokman/cloud-link?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/noamokman/cloud-link.svg)](https://greenkeeper.io/)
 A cli tool to help create symlinks from your synced cloud directory to various locations
 
 Common use cases:
