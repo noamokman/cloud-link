@@ -1,6 +1,6 @@
 {
   "name": "cloud-link",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "automatically link cloud folders",
   "main": "lib/index.js",
   "scripts": {
