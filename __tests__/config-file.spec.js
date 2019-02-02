@@ -1,7 +1,9 @@
 import {resolve} from 'path';
-import mock from 'mock-fs';
+import {vol} from 'memfs';
 import * as configFile from '../src/config-file';
-import {mockFs, wrapInitialization} from './util';
+import {wrapInitialization} from './util';
+
+jest.mock('fs');
 
 describe('cloud-link', () => {
   describe('configFile', () => {
@@ -42,18 +44,15 @@ describe('cloud-link', () => {
     describe('get', () => {
       wrapInitialization(() => configFile.get(), () => {
         afterEach(() => {
-          mock.restore();
+          vol.reset();
         });
 
         it('should reject on error', () => {
-          mock({
-            [configFile.getPath()]: mock.file({
-              mode: 0,
-              content: 'lol'
-            })
+          vol.fromJSON({
+            [configFile.getPath()]: {}
           });
 
-          return expect(configFile.get()).rejects.toHaveProperty('code', 'EACCES');
+          return expect(configFile.get()).rejects.toHaveProperty('code', 'EISDIR');
         });
 
         it('should return the template on missing file', () => configFile.get()
@@ -64,7 +63,7 @@ describe('cloud-link', () => {
         it('should return the file contents', () => {
           const file = {links: [{name: 'test'}]};
 
-          mock({
+          vol.fromJSON({
             [configFile.getPath()]: JSON.stringify(file)
           });
 
@@ -78,8 +77,6 @@ describe('cloud-link', () => {
 
     describe('set', () => {
       wrapInitialization(() => configFile.set(), () => {
-        mockFs();
-
         it('should save the data', () => {
           const file = {links: [{name: 'lol'}]};
 
@@ -95,8 +92,6 @@ describe('cloud-link', () => {
 
     describe('clean', () => {
       wrapInitialization(() => configFile.clean(), () => {
-        mockFs();
-
         it('should delete the file', () => {
           const file = {links: [{name: 'lol'}]};
 

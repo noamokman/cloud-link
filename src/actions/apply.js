@@ -19,5 +19,5 @@ export default (...names) => list()
         .then(stats => stats.isDirectory() ? 'junction' : 'file')
         .then(type => lnfs(src, dest, type))
         .then(() => ({name, src, dest, status: 'linked'}))
-        .catch(err => ({name, src, dest, error: err, status: err.code !== 'ENOENT' ? 'error' : 'missing'}))));
+        .catch(error => ({name, src, dest, error, status: error.code !== 'ENOENT' ? 'error' : 'missing'}))));
   });

@@ -1,16 +1,16 @@
-import {wrapInitialization, mockFs} from '../util';
+import {wrapInitialization} from '../util';
 import remove from '../../src/actions/remove';
 import add from '../../src/actions/add';
 import list from '../../src/actions/list';
 import {set} from '../../src/config-file';
+
+jest.mock('fs');
 
 describe('cloud-link', () => {
   describe('remove', () => {
     const link = {name: 'lol', src: 'lol.txt', dest: 'lol2.txt'};
 
     wrapInitialization(() => remove({name: link.name}), () => {
-      mockFs();
-
       it('should throw if invalid values initialized', () => expect(() => remove()).toThrow(TypeError));
 
       it('should throw if missing link', () => expect(remove({name: 'missing'})).rejects.toHaveProperty('message', 'Trying to remove link named \'missing\' but none were found.'));

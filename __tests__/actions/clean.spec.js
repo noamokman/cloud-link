@@ -1,27 +1,25 @@
 import add from '../../src/actions/add';
 import list from '../../src/actions/list';
 import clean from '../../src/actions/clean';
-import {mockFs, wrapInitialization} from '../util';
+import {wrapInitialization} from '../util';
+
+jest.mock('fs');
 
 describe('cloud-link', () => {
   describe('clean', () => {
     wrapInitialization(() => clean(), () => {
-      mockFs();
-
-      it('should delete the config file', () => {
+      it('should delete the config file', async () => {
         const link = {name: 'lol', src: 'lol.txt', dest: 'lol2.txt'};
 
-        return add(link)
-          .then(() => list())
-          .then(list => {
-            expect(list).toHaveLength(1);
+        await add(link);
+        const data = await list();
 
-            return clean();
-          })
-          .then(() => list())
-          .then(list => {
-            expect(list).toHaveLength(0);
-          });
+        expect(data).toHaveLength(1);
+
+        await clean();
+        const newList = await list();
+
+        expect(newList).toHaveLength(0);
       });
     });
   });

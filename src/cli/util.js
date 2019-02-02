@@ -45,8 +45,8 @@ export const registerCommand = ({name, alias, description, initialization, actio
         .then(() => {
           notify();
         })
-        .catch(err => {
-          console.error(pe.render(err));
+        .catch(error => {
+          console.error(pe.render(error));
         });
     });
 };

@@ -1,25 +1,28 @@
 import lnfs from 'lnfs';
-import {wrapInitialization, mockFs} from '../util';
+import {vol} from 'memfs';
+import {wrapInitialization} from '../util';
 import add from '../../src/actions/add';
 import apply from '../../src/actions/apply';
 
+jest.mock('fs');
+
 describe('cloud-link', () => {
   describe('apply', () => {
-    const links = [
-      {name: 'error', src: 'error.txt', dest: 'error2.txt'},
-      {name: 'missing', src: 'missing.txt', dest: 'missing.txt'},
-      {name: 'good', src: 'good.txt', dest: 'good2.txt'},
-      {name: 'dir', src: 'dir', dest: 'dir2'}
-    ];
-
     wrapInitialization(() => apply(), () => {
-      mockFs({
-        dir: {},
-        'error.txt': 'error',
-        'good.txt': 'good'
-      });
+      const links = [
+        {name: 'error', src: 'error.txt', dest: 'error2.txt'},
+        {name: 'missing', src: 'missing.txt', dest: 'missing.txt'},
+        {name: 'good', src: 'good.txt', dest: 'good2.txt'},
+        {name: 'dir', src: 'dir', dest: 'dir2'}
+      ];
 
       beforeAll(() => {
+        vol.fromJSON({
+          dir: {},
+          'error.txt': 'error',
+          'good.txt': 'good'
+        });
+
         lnfs._registerMock({
           predicate: src => src.includes('error.txt'),
           value: () => Promise.reject(new Error('error'))
