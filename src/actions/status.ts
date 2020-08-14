@@ -1,32 +1,48 @@
 import {hostname} from 'os';
 import {resolve} from 'path';
 import {promises} from 'fs';
-import pCatchIf from 'p-catch-if';
-import _ from 'lodash';
 import store from '../store';
+import {LinkStatus} from '../types';
 import list from './list';
 
 const {lstat, realpath} = promises;
 
-export default (...names) => list()
-  .then(links => {
-    const statusLinks = names.length ? links.filter(({name}) => names.includes(name)) : links;
-    const localLinks = statusLinks.filter(({dest}) => dest[hostname()]);
+const getLinkStatus = async ({src, dest}: {src: string; dest: string}): Promise<LinkStatus> => {
+  try {
+    const stats = await lstat(dest);
 
-    return Promise.all(localLinks.map(({dest, src, name}) => {
-      const resolvedSrc = resolve(store.get('cloudPath'), src);
-      const resolvedDest = resolve(dest[hostname()]);
+    if (!stats.isSymbolicLink()) {
+      return 'unlinked';
+    }
 
-      return lstat(resolvedDest)
-        .then(stats => {
-          if (!stats.isSymbolicLink()) {
-            return 'unlinked';
-          }
+    const res = await realpath(dest);
 
-          return realpath(resolvedDest)
-            .then(res => res !== resolvedSrc ? 'wrong' : 'linked');
-        })
-        .catch(pCatchIf(err => err.code === 'ENOENT', _.constant('missing')))
-        .then(status => ({status, src: resolvedSrc, dest: resolvedDest, name}));
-    }));
-  });
+    return res !== src ? 'wrong' : 'linked';
+  }
+
+  catch (error) {
+    if (error.code !== 'ENOENT') {
+      throw error;
+    }
+
+    return 'missing';
+  }
+};
+
+export default async (...names: string[]) => {
+  const links = await list();
+  const statusLinks = names.length ? links.filter(({name}) => names.includes(name)) : links;
+  const localLinks = statusLinks.filter(({dest}) => dest[hostname()]);
+  const cloudPath = store.get('cloudPath');
+
+  return Promise.all(localLinks.map(async ({dest, src, name}) => {
+    const resolvedSrc = resolve(cloudPath, src);
+    const resolvedDest = resolve(dest[hostname()]);
+    const status = await getLinkStatus({
+      src: resolvedSrc,
+      dest: resolvedDest
+    });
+
+    return {status, src: resolvedSrc, dest: resolvedDest, name};
+  }));
+};

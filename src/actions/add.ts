@@ -3,27 +3,26 @@ import {resolve} from 'path';
 import {get, set} from '../config-file';
 import CloudLinkError from '../cloud-link-error';
 
-export default (...links) => {
+export default async (...links: {name: string; src: string; dest: string}[]) => {
   const badLink = links.find(({name, src, dest}) => typeof name !== 'string' || typeof src !== 'string' || typeof dest !== 'string');
 
   if (badLink || !links.length) {
     throw new TypeError('name, src and dest must be of type string');
   }
 
-  return get()
-    .then(data => {
-      const newLinks = links.reduce((links, {name, src, dest}) => {
-        const link = links[name] || {src, dest: {}};
+  const config = await get();
 
-        if (link.src !== src) {
-          throw new CloudLinkError('Trying to add conflicting links. try to remove the link first.');
-        }
+  const mergedLinks = links.reduce((links, {name, src, dest}) => {
+    const link = links[name] || {src, dest: {}};
 
-        link.dest[hostname()] = resolve(dest);
+    if (link.src !== src) {
+      throw new CloudLinkError('Trying to add conflicting links. try to remove the link first.');
+    }
 
-        return {...links, [name]: link};
-      }, data.links);
+    link.dest[hostname()] = resolve(dest);
 
-      return set({...data, links: newLinks});
-    });
+    return {...links, [name]: link};
+  }, config.links);
+
+  return set({...config, links: mergedLinks});
 };

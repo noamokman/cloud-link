@@ -2,7 +2,6 @@ import updateNotifier from 'update-notifier';
 import PrettyError from 'pretty-error';
 import program from 'caporal';
 import inquirer from 'inquirer';
-import pTry from 'p-try';
 import pkg from '../../package.json';
 import initialized from '../actions/initialized';
 
@@ -14,11 +13,25 @@ pe.appendStyle({
   }
 });
 
-export const notifier = updateNotifier({pkg});
+const notifier = updateNotifier({pkg});
 
-export const notify = () => notifier.notify();
-
-export const registerCommand = ({name, alias, description, initialization, action, args = [], opts = []}) => {
+export const registerCommand = ({
+  name,
+  alias,
+  description,
+  initialization,
+  action,
+  args = [],
+  opts = []
+}: {
+  name: string;
+  alias?: string;
+  description: string;
+  initialization?: boolean;
+  action: (params: {args: Record<string, any>; options: Record<string, any>; logger: Logger}) => void | Promise<void>;
+  args?: Parameters<Command['argument']>[];
+  opts?: Parameters<Command['option']>[];
+}) => {
   const command = program.command(name, description);
 
   if (alias) {
@@ -34,24 +47,25 @@ export const registerCommand = ({name, alias, description, initialization, actio
   });
 
   command
-    .action((args, options, logger) => {
+    .action(async (args, options, logger) => {
       if (initialization && !initialized()) {
         logger.info('Cloud link not initialized! run `cloud-link init` first');
 
         return;
       }
 
-      return pTry(() => action({args, options, logger}))
-        .then(() => {
-          notify();
-        })
-        .catch(error => {
-          console.error(pe.render(error));
-        });
+      try {
+        await action({args, options, logger});
+
+        notifier.notify();
+      }
+      catch (error) {
+        console.error(pe.render(error));
+      }
     });
 };
 
-export const askConfirmation = ({shouldAsk = true, message, action}) => {
+export const askConfirmation = ({shouldAsk = true, message, action}: {shouldAsk: boolean; message: string; action: () => void | Promise<void>}) => {
   if (!shouldAsk) {
     return action();
   }

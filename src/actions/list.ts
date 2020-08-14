@@ -1,5 +1,8 @@
 import {get} from '../config-file';
+import {Link} from '../types';
 
-export default () => get()
-  .then(({links}) => Object.keys(links)
-    .map(name => ({name, ...links[name]})));
+export default async (): Promise<Link[]> => {
+  const {links} = await get();
+
+  return Object.entries(links).map(([name, linkRecord]) => ({name, ...linkRecord}));
+};

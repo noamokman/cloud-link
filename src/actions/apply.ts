@@ -1,23 +1,31 @@
-import {stat} from 'fs';
+import {promises} from 'fs';
 import {hostname} from 'os';
 import {resolve} from 'path';
-import lnfs from 'lnfs';
-import pify from 'pify';
+import * as lnfs from 'lnfs';
 import store from '../store';
 import list from './list';
 
-const statP = pify(stat);
+const {stat} = promises;
 
-export default (...names) => list()
-  .then(links => {
-    const applyLinks = names.length ? links.filter(({name}) => names.includes(name)) : links;
+const applyLink = async ({name, src, dest}: {name: string; src: string; dest: string}) => {
+  try {
+    const stats = await stat(src);
 
-    return Promise.all(applyLinks
-      .map(link => ({...link, src: resolve(store.get('cloudPath'), link.src), dest: link.dest[hostname()]}))
-      .filter(({dest}) => dest)
-      .map(({src, dest, name}) => statP(src)
-        .then(stats => stats.isDirectory() ? 'junction' : 'file')
-        .then(type => lnfs(src, dest, type))
-        .then(() => ({name, src, dest, status: 'linked'}))
-        .catch(error => ({name, src, dest, error, status: error.code !== 'ENOENT' ? 'error' : 'missing'}))));
-  });
+    await lnfs(src, dest, stats.isDirectory() ? 'junction' : 'file');
+
+    return {name, src, dest, status: 'linked'};
+  }
+  catch (error) {
+    return {name, src, dest, error, status: error.code !== 'ENOENT' ? 'error' : 'missing'};
+  }
+};
+
+export default async (...names: string[]) => {
+  const links = await list();
+  const applyLinks = names.length ? links.filter(({name}) => names.includes(name)) : links;
+
+  return Promise.all(applyLinks
+    .map(link => ({...link, src: resolve(store.get('cloudPath'), link.src), dest: link.dest[hostname()]}))
+    .filter(({dest}) => dest)
+    .map(applyLink));
+};

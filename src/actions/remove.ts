@@ -3,35 +3,34 @@ import _ from 'lodash';
 import {get, set} from '../config-file';
 import CloudLinkError from '../cloud-link-error';
 
-export default (...links) => {
+export default async (...links: {name: string; all: boolean}[]) => {
   const badLink = links.find(({name, all = false}) => typeof name !== 'string' || typeof all !== 'boolean');
 
   if (badLink || !links.length) {
     throw new TypeError('name must be of type string and all must be of type boolean');
   }
 
-  return get()
-    .then(data => {
-      const newLinks = links.reduce((links, {name, all}) => {
-        if (!links[name]) {
-          throw new CloudLinkError(`Trying to remove link named '${name}' but none were found.`);
-        }
+  const config = await get();
 
-        if (all) {
-          delete links[name];
+  const mergedLinks = links.reduce((links, {name, all}) => {
+    if (!links[name]) {
+      throw new CloudLinkError(`Trying to remove link named '${name}' but none were found.`);
+    }
 
-          return {...links};
-        }
+    if (all) {
+      delete links[name];
 
-        delete links[name].dest[hostname()];
+      return {...links};
+    }
 
-        if (_.isEmpty(links[name].dest)) {
-          delete links[name];
-        }
+    delete links[name].dest[hostname()];
 
-        return {...links};
-      }, data.links);
+    if (_.isEmpty(links[name].dest)) {
+      delete links[name];
+    }
 
-      return set({...data, links: newLinks});
-    });
+    return links;
+  }, config.links);
+
+  return set({...config, links: mergedLinks});
 };
