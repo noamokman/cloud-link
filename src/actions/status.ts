@@ -1,13 +1,12 @@
 import {hostname} from 'os';
 import {resolve} from 'path';
-import fs from 'fs';
-import pify from 'pify';
+import {promises} from 'fs';
 import pCatchIf from 'p-catch-if';
 import _ from 'lodash';
 import store from '../store';
 import list from './list';
 
-const {lstat, realpath} = pify(fs);
+const {lstat, realpath} = promises;
 
 export default (...names) => list()
   .then(links => {

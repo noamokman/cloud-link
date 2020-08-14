@@ -2,11 +2,11 @@ import {BOOL} from 'caporal';
 import {registerCommand} from '../util';
 import {add, apply, list} from '../..';
 
-const getSrcByName = name => list()
+const getSrcByName = (name: string) => list()
   .then(links => {
     const link = links.find(link => link.name === name);
 
-    return link && link.src;
+    return link?.src;
   });
 
 const resolveSrc = (src, name) => {
