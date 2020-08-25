@@ -26,7 +26,7 @@ describe('cloud-link', () => {
         links: {
           lol: {
             src: 'lol.txt', dest: {
-              OtherPC: 'lol2.txt'
+              otherPC: 'lol2.txt'
             }
           }
         }
@@ -45,7 +45,7 @@ describe('cloud-link', () => {
         links: {
           lol: {
             src: 'lol.txt', dest: {
-              OtherPC: 'lol2.txt'
+              otherPC: 'lol2.txt'
             }
           }
         }

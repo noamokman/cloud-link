@@ -1,5 +1,4 @@
 import {resolve} from 'path';
-import pify from 'pify';
 import {vol, fs} from 'memfs';
 import {wrapInitialization} from '../util';
 import status from '../../src/actions/status';
@@ -7,7 +6,7 @@ import add from '../../src/actions/add';
 
 jest.mock('fs');
 
-const symlinkP = pify(fs.symlink);
+const symlinkP = fs.promises.symlink;
 
 describe('cloud-link', () => {
   describe('status', () => {

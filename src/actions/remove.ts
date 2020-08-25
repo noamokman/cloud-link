@@ -3,7 +3,7 @@ import _ from 'lodash';
 import {get, set} from '../config-file';
 import CloudLinkError from '../cloud-link-error';
 
-export default async (...links: {name: string; all: boolean}[]) => {
+export default async (...links: {name: string; all?: boolean}[]) => {
   const badLink = links.find(({name, all = false}) => typeof name !== 'string' || typeof all !== 'boolean');
 
   if (badLink || !links.length) {

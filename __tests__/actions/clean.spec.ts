@@ -17,9 +17,9 @@ describe('cloud-link', () => {
         expect(data).toHaveLength(1);
 
         await clean();
-        const newList = await list();
+        const finalList = await list();
 
-        expect(newList).toHaveLength(0);
+        expect(finalList).toHaveLength(0);
       });
     });
   });
