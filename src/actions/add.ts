@@ -2,8 +2,9 @@ import {hostname} from 'os';
 import {resolve} from 'path';
 import {get, set} from '../config-file';
 import CloudLinkError from '../cloud-link-error';
+import {LinkInstance} from '../types';
 
-export default async (...links: {name: string; src: string; dest: string}[]) => {
+export default async (...links: LinkInstance[]) => {
   const badLink = links.find(({name, src, dest}) => typeof name !== 'string' || typeof src !== 'string' || typeof dest !== 'string');
 
   if (badLink || !links.length) {
@@ -24,5 +25,5 @@ export default async (...links: {name: string; src: string; dest: string}[]) => 
     return {...links, [name]: link};
   }, config.links);
 
-  return set({...config, links: mergedLinks});
+  await set({...config, links: mergedLinks});
 };

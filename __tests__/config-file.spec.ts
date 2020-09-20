@@ -1,7 +1,7 @@
 import {resolve} from 'path';
 import {vol} from 'memfs';
 import * as configFile from '../src/config-file';
-import {wrapInitialization} from './util';
+import wrapInitialization from './wrapInitialization';
 
 jest.mock('fs');
 

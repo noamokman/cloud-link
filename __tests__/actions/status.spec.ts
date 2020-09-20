@@ -1,6 +1,6 @@
 import {resolve} from 'path';
 import {vol, fs} from 'memfs';
-import {wrapInitialization} from '../util';
+import wrapInitialization from '../wrapInitialization';
 import status from '../../src/actions/status';
 import add from '../../src/actions/add';
 
@@ -44,28 +44,27 @@ describe('cloud-link', () => {
           });
       });
 
-      it('should show status of unlinked', () => {
+      it('should show status of unlinked', async () => {
         const link = {
           name: 'unlinked',
           src: 'unlinked.txt',
           dest: 'unlinked2.txt'
         };
 
-        return add(link)
-          .then(() => status())
-          .then(links => {
-            expect(Array.isArray(links)).toBeTruthy();
-            expect(links).toHaveLength(2);
+        await add(link);
+        const links = await status();
 
-            const [, unlinked] = links;
+        expect(Array.isArray(links)).toBeTruthy();
+        expect(links).toHaveLength(2);
 
-            expect(unlinked).toMatchObject({
-              name: link.name,
-              src: resolve(link.src),
-              dest: resolve(link.dest),
-              status: 'unlinked'
-            });
-          });
+        const [, unlinked] = links;
+
+        expect(unlinked).toMatchObject({
+          name: link.name,
+          src: resolve(link.src),
+          dest: resolve(link.dest),
+          status: 'unlinked'
+        });
       });
 
       it('should show status of wrong', async () => {

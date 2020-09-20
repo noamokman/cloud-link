@@ -1,4 +1,4 @@
-import {wrapInitialization} from '../util';
+import wrapInitialization from '../wrapInitialization';
 import remove from '../../src/actions/remove';
 import add from '../../src/actions/add';
 import list from '../../src/actions/list';
@@ -41,24 +41,26 @@ describe('cloud-link', () => {
           expect(list[0].dest.OtherPC).toEqual('lol2.txt');
         }));
 
-      it('should remove all links', () => set({
-        links: {
-          lol: {
-            src: 'lol.txt', dest: {
-              otherPC: 'lol2.txt'
+      it('should remove all links', async () => {
+        await set({
+          links: {
+            lol: {
+              src: 'lol.txt', dest: {
+                otherPC: 'lol2.txt'
+              }
             }
           }
-        }
-      })
-        .then(() => add(link))
-        .then(() => remove({
+        });
+        await add(link);
+        await remove({
           name: link.name,
           all: true
-        }))
-        .then(() => list())
-        .then(list => {
-          expect(list).toHaveLength(0);
-        }));
+        });
+
+        const links = await list();
+
+        expect(links).toHaveLength(0);
+      });
     });
   });
 });

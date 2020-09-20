@@ -1,4 +1,4 @@
-import {wrapInitialization} from '../util';
+import wrapInitialization from '../wrapInitialization';
 import add from '../../src/actions/add';
 import list from '../../src/actions/list';
 
@@ -18,7 +18,7 @@ describe('cloud-link', () => {
         expect(data[0]).toHaveProperty('name', link.name);
         expect(data[0]).toHaveProperty('src', link.src);
         expect(data[0]).toHaveProperty('dest');
-        expect(data[0].dest[0]).toBe(data.dest);
+        expect(data[0].dest[0]).toBe(link.dest);
       });
     });
   });

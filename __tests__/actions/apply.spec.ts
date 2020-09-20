@@ -1,6 +1,6 @@
 import lnfs from 'lnfs';
 import {vol} from 'memfs';
-import {wrapInitialization} from '../util';
+import wrapInitialization from '../wrapInitialization';
 import add from '../../src/actions/add';
 import apply from '../../src/actions/apply';
 
@@ -33,53 +33,55 @@ describe('cloud-link', () => {
         lnfs._clearMocks();
       });
 
-      it('should apply all the links', () => add(...links)
-        .then(() => apply())
-        .then(report => {
-          expect(report).toHaveLength(4);
+      it('should apply all the links', async () => {
+        await add(...links);
+        const report = await apply();
 
-          const [
-            error,
-            missing,
-            good,
-            dir
-          ] = report;
+        expect(report).toHaveLength(4);
 
-          expect(error).toHaveProperty('name', error.name);
-          expect(error).toHaveProperty('src', error.src);
-          expect(error).toHaveProperty('status', 'error');
-          expect(error).toHaveProperty('error');
-          expect(error.error).toHaveProperty('message', 'error');
+        const [
+          error,
+          missing,
+          good,
+          dir
+        ] = report;
 
-          expect(missing).toHaveProperty('name', missing.name);
-          expect(missing).toHaveProperty('src', missing.src);
-          expect(missing).toHaveProperty('status', 'missing');
-          expect(missing).toHaveProperty('error');
-          expect(missing.error).toHaveProperty('code', 'ENOENT');
+        expect(error).toHaveProperty('name', error.name);
+        expect(error).toHaveProperty('src', error.src);
+        expect(error).toHaveProperty('status', 'error');
+        expect(error).toHaveProperty('error');
+        expect(error.error).toHaveProperty('message', 'error');
 
-          expect(good).toHaveProperty('name', good.name);
-          expect(good).toHaveProperty('src', good.src);
-          expect(good).toHaveProperty('status', 'linked');
-          expect(good).not.toHaveProperty('error');
+        expect(missing).toHaveProperty('name', missing.name);
+        expect(missing).toHaveProperty('src', missing.src);
+        expect(missing).toHaveProperty('status', 'missing');
+        expect(missing).toHaveProperty('error');
+        expect(missing.error).toHaveProperty('code', 'ENOENT');
 
-          expect(dir).toHaveProperty('name', dir.name);
-          expect(dir).toHaveProperty('src', dir.src);
-          expect(dir).toHaveProperty('status', 'linked');
-          expect(dir).not.toHaveProperty('error');
-        }));
+        expect(good).toHaveProperty('name', good.name);
+        expect(good).toHaveProperty('src', good.src);
+        expect(good).toHaveProperty('status', 'linked');
+        expect(good).not.toHaveProperty('error');
 
-      it('should apply given links', () => add(...links)
-        .then(() => apply('good'))
-        .then(report => {
-          expect(report).toHaveLength(1);
+        expect(dir).toHaveProperty('name', dir.name);
+        expect(dir).toHaveProperty('src', dir.src);
+        expect(dir).toHaveProperty('status', 'linked');
+        expect(dir).not.toHaveProperty('error');
+      });
 
-          const [good] = report;
+      it('should apply given links', async () => {
+        await add(...links);
+        const report = await apply('good');
 
-          expect(good).toHaveProperty('name', good.name);
-          expect(good).toHaveProperty('src', good.src);
-          expect(good).toHaveProperty('status', 'linked');
-          expect(good).not.toHaveProperty('error');
-        }));
+        expect(report).toHaveLength(1);
+
+        const [good] = report;
+
+        expect(good).toHaveProperty('name', good.name);
+        expect(good).toHaveProperty('src', good.src);
+        expect(good).toHaveProperty('status', 'linked');
+        expect(good).not.toHaveProperty('error');
+      });
     });
   });
 });

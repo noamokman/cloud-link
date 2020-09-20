@@ -3,11 +3,12 @@ import {hostname} from 'os';
 import {resolve} from 'path';
 import * as lnfs from 'lnfs';
 import store from '../store';
+import {LinkApplyResult, LinkInstance} from '../types';
 import list from './list';
 
 const {stat} = promises;
 
-const applyLink = async ({name, src, dest}: {name: string; src: string; dest: string}) => {
+const applyLink = async ({name, src, dest}: LinkInstance): Promise<LinkApplyResult> => {
   try {
     const stats = await stat(src);
 
@@ -20,12 +21,16 @@ const applyLink = async ({name, src, dest}: {name: string; src: string; dest: st
   }
 };
 
-export default async (...names: string[]) => {
+export default async (...names: string[]): Promise<LinkApplyResult[]> => {
   const links = await list();
   const applyLinks = names.length ? links.filter(({name}) => names.includes(name)) : links;
 
   return Promise.all(applyLinks
-    .map(link => ({...link, src: resolve(store.get('cloudPath'), link.src), dest: link.dest[hostname()]}))
+    .map(({src, dest, name}) => ({
+      name,
+      src: resolve(store.get('cloudPath'), src),
+      dest: dest[hostname()]
+    }))
     .filter(({dest}) => dest)
     .map(applyLink));
 };

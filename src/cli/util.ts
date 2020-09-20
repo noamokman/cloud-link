@@ -65,16 +65,17 @@ export const registerCommand = ({
     });
 };
 
-export const askConfirmation = ({shouldAsk = true, message, action}: {shouldAsk: boolean; message: string; action: () => void | Promise<void>}) => {
+export const askConfirmation = async ({shouldAsk = true, message, action}: {shouldAsk: boolean; message: string; action: () => void | Promise<void>}) => {
   if (!shouldAsk) {
     return action();
   }
 
-  return inquirer.prompt([{
+  const {confirm} = await inquirer.prompt([{
     type: 'confirm',
     name: 'confirm',
     message,
     default: false
-  }])
-    .then(({confirm}) => confirm && action());
+  }]);
+
+  return confirm && action();
 };

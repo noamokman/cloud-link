@@ -1,7 +1,7 @@
 import add from '../../src/actions/add';
 import list from '../../src/actions/list';
 import clean from '../../src/actions/clean';
-import {wrapInitialization} from '../util';
+import wrapInitialization from '../wrapInitialization';
 
 jest.mock('fs');
 

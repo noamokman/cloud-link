@@ -32,5 +32,5 @@ export default async (...links: {name: string; all?: boolean}[]) => {
     return links;
   }, config.links);
 
-  return set({...config, links: mergedLinks});
+  await set({...config, links: mergedLinks});
 };
