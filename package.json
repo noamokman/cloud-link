@@ -32,10 +32,10 @@
   },
   "homepage": "https://github.com/noamokman/cloud-link#readme",
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "lint-staged": {
-    "*.{js,ts}": "eslint --fix"
+    "*.{ts}": "eslint --fix"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
@@ -53,7 +53,7 @@
     "@types/lodash": "^4.14.160",
     "@types/nested-error-stacks": "^2.1.0",
     "@types/prettyjson": "^0.0.29",
-    "@types/update-notifier": "^4.1.1",
+    "@types/update-notifier": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^26.3.0",
@@ -82,7 +82,7 @@
     "nested-error-stacks": "^2.1.0",
     "pretty-error": "^2.1.1",
     "prettyjson": "^1.2.1",
-    "update-notifier": "^4.1.1",
+    "update-notifier": "^5.0.0",
     "write-json-file": "^4.3.0"
   },
   "jest": {
