@@ -14,8 +14,8 @@ describe('cloud-link', () => {
         vol.reset();
       });
 
-      it('should throw if invalid values initialized', () => {
-        expect(() => add()).toThrow(TypeError);
+      it('should throw if invalid values initialized', async () => {
+        await expect(() => add()).rejects.toThrow(TypeError);
       });
 
       it('should add the link', async () => {

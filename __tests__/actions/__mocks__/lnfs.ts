@@ -1,19 +1,22 @@
 const lnfs = jest.genMockFromModule('lnfs');
 
-let mocks = [];
+export interface LnfsMock {
+  predicate: (...args: any) => boolean;
+  value: () => any;
+}
 
-const mock = (...args) => {
+let mocks: LnfsMock = [];
+
+export default (...args) => {
   const found = mocks.find(({predicate}) => predicate(...args));
 
   return found ? found.value() : lnfs(...args);
 };
 
-mock._registerMock = mock => {
+export const _registerMock = mock => {
   mocks.push(mock);
 };
 
-mock._clearMocks = () => {
+export const _clearMocks = () => {
   mocks = [];
 };
-
-module.exports = mock;

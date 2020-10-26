@@ -1,7 +1,7 @@
 import {promises} from 'fs';
 import {hostname} from 'os';
 import {resolve} from 'path';
-import * as lnfs from 'lnfs';
+import lnfs from 'lnfs';
 import store from '../store';
 import {LinkApplyResult, LinkInstance} from '../types';
 import list from './list';

@@ -20,28 +20,27 @@ describe('cloud-link', () => {
         });
       });
 
-      it('should show status of missing', () => {
+      it('should show status of missing', async () => {
         const link = {
           name: 'missing',
           src: 'missing.txt',
           dest: 'missing2.txt'
         };
 
-        return add(link)
-          .then(() => status())
-          .then(links => {
-            expect(Array.isArray(links)).toBeTruthy();
-            expect(links).toHaveLength(1);
+        await add(link);
 
-            const [missing] = links;
+        const links = await status();
+        expect(Array.isArray(links)).toBeTruthy();
+        expect(links).toHaveLength(1);
 
-            expect(missing).toMatchObject({
-              name: link.name,
-              src: resolve(link.src),
-              dest: resolve(link.dest),
-              status: 'missing'
-            });
-          });
+        const [missing] = links;
+
+        expect(missing).toMatchObject({
+          name: link.name,
+          src: resolve(link.src),
+          dest: resolve(link.dest),
+          status: 'missing'
+        });
       });
 
       it('should show status of unlinked', async () => {
@@ -98,7 +97,6 @@ describe('cloud-link', () => {
           src: 'linked.txt',
           dest: 'linked2.txt'
         };
-
 
         await symlinkP(resolve(link.src), resolve('linked2.txt'));
         await add(link);

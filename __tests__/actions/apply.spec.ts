@@ -1,4 +1,4 @@
-import lnfs from 'lnfs';
+import {_clearMocks, _registerMock} from 'lnfs';
 import {vol} from 'memfs';
 import wrapInitialization from '../wrapInitialization';
 import add from '../../src/actions/add';
@@ -23,14 +23,14 @@ describe('cloud-link', () => {
           'good.txt': 'good'
         });
 
-        lnfs._registerMock({
+        _registerMock({
           predicate: src => src.includes('error.txt'),
           value: () => Promise.reject(new Error('error'))
         });
       });
 
       afterAll(() => {
-        lnfs._clearMocks();
+        _clearMocks();
       });
 
       it('should apply all the links', async () => {
