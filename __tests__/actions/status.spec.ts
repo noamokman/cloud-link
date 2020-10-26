@@ -123,6 +123,17 @@ describe('cloud-link', () => {
         expect(Array.isArray(links)).toBeTruthy();
         expect(links).toHaveLength(1);
       });
+
+      it('should fail on error', async () => {
+        const link = {
+          name: 'error',
+          src: 'error',
+          dest: 'error'
+        };
+
+        await add(link);
+        await expect(status()).rejects.toThrowError('error');
+      });
     });
   });
 });
