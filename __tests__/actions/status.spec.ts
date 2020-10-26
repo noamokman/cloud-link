@@ -1,13 +1,12 @@
 import {resolve} from 'path';
-import pify from 'pify';
 import {vol, fs} from 'memfs';
-import {wrapInitialization} from '../util';
+import wrapInitialization from '../wrapInitialization';
 import status from '../../src/actions/status';
 import add from '../../src/actions/add';
 
 jest.mock('fs');
 
-const symlinkP = pify(fs.symlink);
+const symlinkP = fs.promises.symlink;
 
 describe('cloud-link', () => {
   describe('status', () => {
@@ -21,52 +20,51 @@ describe('cloud-link', () => {
         });
       });
 
-      it('should show status of missing', () => {
+      it('should show status of missing', async () => {
         const link = {
           name: 'missing',
           src: 'missing.txt',
           dest: 'missing2.txt'
         };
 
-        return add(link)
-          .then(() => status())
-          .then(links => {
-            expect(Array.isArray(links)).toBeTruthy();
-            expect(links).toHaveLength(1);
+        await add(link);
 
-            const [missing] = links;
+        const links = await status();
 
-            expect(missing).toMatchObject({
-              name: link.name,
-              src: resolve(link.src),
-              dest: resolve(link.dest),
-              status: 'missing'
-            });
-          });
+        expect(Array.isArray(links)).toBeTruthy();
+        expect(links).toHaveLength(1);
+
+        const [missing] = links;
+
+        expect(missing).toMatchObject({
+          name: link.name,
+          src: resolve(link.src),
+          dest: resolve(link.dest),
+          status: 'missing'
+        });
       });
 
-      it('should show status of unlinked', () => {
+      it('should show status of unlinked', async () => {
         const link = {
           name: 'unlinked',
           src: 'unlinked.txt',
           dest: 'unlinked2.txt'
         };
 
-        return add(link)
-          .then(() => status())
-          .then(links => {
-            expect(Array.isArray(links)).toBeTruthy();
-            expect(links).toHaveLength(2);
+        await add(link);
+        const links = await status();
 
-            const [, unlinked] = links;
+        expect(Array.isArray(links)).toBeTruthy();
+        expect(links).toHaveLength(2);
 
-            expect(unlinked).toMatchObject({
-              name: link.name,
-              src: resolve(link.src),
-              dest: resolve(link.dest),
-              status: 'unlinked'
-            });
-          });
+        const [, unlinked] = links;
+
+        expect(unlinked).toMatchObject({
+          name: link.name,
+          src: resolve(link.src),
+          dest: resolve(link.dest),
+          status: 'unlinked'
+        });
       });
 
       it('should show status of wrong', async () => {
@@ -101,7 +99,6 @@ describe('cloud-link', () => {
           dest: 'linked2.txt'
         };
 
-
         await symlinkP(resolve(link.src), resolve('linked2.txt'));
         await add(link);
 
@@ -125,6 +122,17 @@ describe('cloud-link', () => {
 
         expect(Array.isArray(links)).toBeTruthy();
         expect(links).toHaveLength(1);
+      });
+
+      it('should fail on error', async () => {
+        const link = {
+          name: 'error',
+          src: 'error',
+          dest: 'error'
+        };
+
+        await add(link);
+        await expect(status()).rejects.toThrowError('error');
       });
     });
   });

@@ -1,7 +1,7 @@
 import {resolve} from 'path';
 import {vol} from 'memfs';
 import * as configFile from '../src/config-file';
-import {wrapInitialization} from './util';
+import wrapInitialization from './wrapInitialization';
 
 jest.mock('fs');
 
@@ -55,36 +55,35 @@ describe('cloud-link', () => {
           return expect(configFile.get()).rejects.toHaveProperty('code', 'EISDIR');
         });
 
-        it('should return the template on missing file', () => configFile.get()
-          .then(config => {
-            expect(config).toEqual(configFile.defaultTemplate);
-          }));
+        it('should return the template on missing file', async () => {
+          const config = await configFile.get();
 
-        it('should return the file contents', () => {
+          expect(config).toEqual(configFile.defaultTemplate);
+        });
+
+        it('should return the file contents', async () => {
           const file = {links: [{name: 'test'}]};
 
           vol.fromJSON({
             [configFile.getPath()]: JSON.stringify(file)
           });
 
-          return configFile.get()
-            .then(config => {
-              expect(config).toMatchObject(file);
-            });
+          const config = await configFile.get();
+
+          expect(config).toMatchObject(file);
         });
       });
     });
 
     describe('set', () => {
-      wrapInitialization(() => configFile.set(), () => {
-        it('should save the data', () => {
-          const file = {links: [{name: 'lol'}]};
+      wrapInitialization(() => configFile.set({links: {}}), () => {
+        it('should save the data', async () => {
+          const file = {links: {lol: {src: '', dest: {}}}};
 
-          return configFile.set(file)
-            .then(() => configFile.get())
-            .then(config => {
-              expect(config).toMatchObject(file);
-            });
+          await configFile.set(file);
+          const config = await configFile.get();
+
+          expect(config).toMatchObject(file);
         });
       });
     });
@@ -92,15 +91,14 @@ describe('cloud-link', () => {
 
     describe('clean', () => {
       wrapInitialization(() => configFile.clean(), () => {
-        it('should delete the file', () => {
-          const file = {links: [{name: 'lol'}]};
+        it('should delete the file', async () => {
+          const file = {links: {lol: {src: '', dest: {}}}};
 
-          return configFile.set(file)
-            .then(() => configFile.clean())
-            .then(() => configFile.get())
-            .then(config => {
-              expect(config).toEqual(configFile.defaultTemplate);
-            });
+          await configFile.set(file);
+          await configFile.clean();
+          const config = await configFile.get();
+
+          expect(config).toEqual(configFile.defaultTemplate);
         });
       });
     });

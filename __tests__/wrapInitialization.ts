@@ -1,15 +1,11 @@
 import init from '../src/actions/init';
 import clear from '../src/actions/clear';
 
-export function shouldThrowIfNotInitialized (fn) {
-  it('should throw if not initialized', () => {
-    expect(fn).toThrow('Cloud link not initialized');
-  });
-}
-
-export function wrapInitialization (uninitialized, initialized) {
+export default (uninitialized: () => any, initialized: () => any) => {
   describe('uninitialized', () => {
-    shouldThrowIfNotInitialized(uninitialized);
+    it('should throw or reject if not initialized', async () => {
+      await expect(async () => uninitialized()).rejects.toThrowError('Cloud link not initialized');
+    });
   });
 
   describe('initialized', () => {
@@ -23,4 +19,4 @@ export function wrapInitialization (uninitialized, initialized) {
 
     initialized();
   });
-}
+};
