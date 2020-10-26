@@ -40,6 +40,7 @@ describe('cloud-link', () => {
         });
 
         const links = await list();
+
         expect(links).toHaveLength(1);
         expect(links[0].dest.otherPC).toEqual('lol2.txt');
       });

@@ -11,7 +11,7 @@ registerCommand({
     const {cloudPath} = info();
 
     return askConfirmation({
-      shouldAsk: cloudPath && !force,
+      shouldAsk: !!(cloudPath && !force),
       message: `Cloud link already initialized in \`${cloudPath}\`.
 Do you want to overwrite?`,
       action () {

@@ -30,6 +30,7 @@ describe('cloud-link', () => {
         await add(link);
 
         const links = await status();
+
         expect(Array.isArray(links)).toBeTruthy();
         expect(links).toHaveLength(1);
 

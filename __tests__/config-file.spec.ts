@@ -56,7 +56,7 @@ describe('cloud-link', () => {
         });
 
         it('should return the template on missing file', async () => {
-          const config = await configFile.get()
+          const config = await configFile.get();
 
           expect(config).toEqual(configFile.defaultTemplate);
         });
@@ -68,7 +68,7 @@ describe('cloud-link', () => {
             [configFile.getPath()]: JSON.stringify(file)
           });
 
-          const config = await configFile.get()
+          const config = await configFile.get();
 
           expect(config).toMatchObject(file);
         });
@@ -82,6 +82,7 @@ describe('cloud-link', () => {
 
           await configFile.set(file);
           const config = await configFile.get();
+
           expect(config).toMatchObject(file);
         });
       });
@@ -96,6 +97,7 @@ describe('cloud-link', () => {
           await configFile.set(file);
           await configFile.clean();
           const config = await configFile.get();
+
           expect(config).toEqual(configFile.defaultTemplate);
         });
       });
