@@ -18,7 +18,7 @@ describe('cloud-link', () => {
         expect(data[0]).toHaveProperty('name', link.name);
         expect(data[0]).toHaveProperty('src', link.src);
         expect(data[0]).toHaveProperty('dest');
-        expect(Object.values(data[0].dest)[0]).toBe(link.dest);
+        expect(Object.values(data[0].dest)[0]).toBe(`/${link.dest}`);
       });
     });
   });
