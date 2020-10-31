@@ -13,7 +13,7 @@
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
     "jest": "jest",
-    "coveralls": "cat coverage/lcov.info  && cat coverage/lcov.info | coveralls",
+    "coveralls": "cat coverage/lcov.info  && cat coverage/lcov.info | coveralls -v",
     "prepublishOnly": "npm run build",
     "test": "npm run lint && npm run jest"
   },
