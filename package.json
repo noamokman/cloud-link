@@ -10,7 +10,7 @@
     "babel": "babel src -d lib -s",
     "build": "rimraf lib && npm run babel",
     "jest": "jest",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "coveralls": "cat coverage/lcov.info | coveralls",
     "prepublishOnly": "npm run build",
     "test": "npm run lint && npm run jest"
   },
