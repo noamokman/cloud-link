@@ -7,7 +7,7 @@ import writeJsonFile from 'write-json-file';
 import store from './store';
 import CloudLinkError from './cloud-link-error';
 import initialized from './actions/initialized';
-import {Config} from './types';
+import type {Config} from './types';
 
 const {unlink} = promises;
 

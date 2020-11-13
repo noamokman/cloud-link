@@ -2,7 +2,7 @@ import {hostname} from 'os';
 import {resolve} from 'path';
 import {get, set} from '../config-file';
 import CloudLinkError from '../cloud-link-error';
-import {LinkInstance} from '../types';
+import type {LinkInstance} from '../types';
 
 export default async (...links: LinkInstance[]) => {
   const badLink = links.find(({name, src, dest}) => typeof name !== 'string' || typeof src !== 'string' || typeof dest !== 'string');
