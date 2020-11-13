@@ -1,5 +1,5 @@
 import {get} from '../config-file';
-import {Link} from '../types';
+import type {Link} from '../types';
 
 export default async (): Promise<Link[]> => {
   const {links} = await get();

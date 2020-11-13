@@ -2,7 +2,7 @@ import {hostname} from 'os';
 import {resolve} from 'path';
 import {promises} from 'fs';
 import store from '../store';
-import {LinkReport, LinkStatus} from '../types';
+import type {LinkReport, LinkStatus} from '../types';
 import list from './list';
 
 const {lstat, realpath} = promises;

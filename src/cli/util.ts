@@ -1,5 +1,6 @@
 import updateNotifier from 'update-notifier';
 import PrettyError from 'pretty-error';
+import type {Command, Logger} from 'caporal';
 import program from 'caporal';
 import inquirer from 'inquirer';
 import pkg from '../../package.json';

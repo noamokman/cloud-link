@@ -3,7 +3,7 @@ import {hostname} from 'os';
 import {resolve} from 'path';
 import lnfs from 'lnfs';
 import store from '../store';
-import {LinkApplyResult, LinkInstance} from '../types';
+import type {LinkApplyResult, LinkInstance} from '../types';
 import list from './list';
 
 const {stat} = promises;
